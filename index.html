@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Serendipity Medi Spa - Clinic Catalyst Audit Report</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dark: #0A2A28;
+  --dark-alt: #0D3D38;
+  --teal: #00B4A0;
+  --teal-bright: #00D4BC;
+  --peach: #E8A87C;
+  --peach-light: #F5C7A0;
+  --white: #FFFFFF;
+  --text-faint: rgba(255,255,255,0.6);
+  --text-mid: rgba(255,255,255,0.85);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Open Sans',sans-serif; background:#000; color:var(--white); overflow:hidden; }
+.deck { height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; }
+.slide { height:100vh; scroll-snap-align:start; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+.slide-img { padding:0; }
+.slide-img img { width:100%; height:100%; object-fit:contain; background:#000; }
+.slide-html { padding:3rem 4rem; background:var(--dark); }
+.slide-html.alt { background:var(--dark-alt); }
+.slide-html.teal-bg { background:linear-gradient(135deg, #073B36 0%, #0A2A28 100%); }
+.slide-html { background:linear-gradient(160deg, #0A2A28 0%, #0E3D3A 40%, #0A2A28 100%); }
+.slide-html.alt { background:linear-gradient(160deg, #0D3D38 0%, #0A2A28 50%, #0D3D38 100%); }
+.inner { max-width:1100px; width:100%; position:relative; z-index:2; }
+.dot-overlay { position:absolute; inset:0; opacity:0.05; background-image:radial-gradient(circle,var(--teal) 1px,transparent 1px); background-size:50px 50px; pointer-events:none; }
+.glow { position:absolute; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(0,180,160,0.12) 0%,transparent 70%); pointer-events:none; }
+.glow-tl { top:-200px; left:-200px; }
+.glow-br { bottom:-200px; right:-200px; }
+.label { font-family:'Montserrat',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--teal-bright); margin-bottom:0.75rem; }
+.label-peach { color:var(--peach); }
+h2 { font-family:'Montserrat',sans-serif; font-size:clamp(1.4rem,3vw,2.2rem); font-weight:800; text-transform:uppercase; line-height:1.1; margin-bottom:1rem; }
+h3 { font-family:'Montserrat',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; margin-bottom:0.6rem; }
+.teal { color:var(--teal-bright); }
+.peach { color:var(--peach); }
+p { font-size:0.9rem; color:var(--text-mid); font-weight:300; line-height:1.8; }
+.split { display:grid; grid-template-columns:2fr 3fr; gap:3rem; align-items:center; }
+.split-even { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
+.mt-1 { margin-top:1rem; }
+.mt-2 { margin-top:2rem; }
+.task-num { font-family:'Montserrat',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--peach); display:inline-block; border:1px solid rgba(232,168,124,0.3); padding:0.25rem 0.7rem; border-radius:4px; margin-bottom:0.8rem; }
+.quote { border-left:3px solid var(--peach); padding:0.8rem 1.2rem; margin-bottom:1.5rem; background:rgba(232,168,124,0.04); border-radius:0 6px 6px 0; }
+.quote p { font-style:italic; color:var(--peach-light); font-size:1rem; line-height:1.5; }
+.browser-frame { border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); background:#111; }
+.browser-bar { height:28px; background:#1a1a1a; display:flex; align-items:center; padding:0 10px; gap:6px; }
+.browser-dot { width:8px; height:8px; border-radius:50%; background:#333; }
+.browser-dot.r { background:#ff5f56; }
+.browser-dot.y { background:#ffbd2e; }
+.browser-dot.g { background:#27c93f; }
+.browser-frame img { width:100%; display:block; }
+.scroll-arrow { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); text-align:center; z-index:10; animation:bounce 2s infinite; cursor:pointer; }
+.scroll-arrow span { display:block; font-family:'Montserrat',sans-serif; font-size:0.6rem; font-weight:600; color:rgba(255,255,255,0.4); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.4rem; }
+.scroll-arrow .arrow { font-size:1.8rem; color:var(--teal-bright); }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+.demo-link { display:inline-flex; align-items:center; gap:0.4rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-size:0.72rem; font-weight:700; text-decoration:none; letter-spacing:0.08em; text-transform:uppercase; margin-top:1rem; transition:color 0.2s; }
+.demo-link:hover { color:#00ffec; }
+.card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:1.3rem; }
+.card h4 { font-family:'Montserrat',sans-serif; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--teal-bright); margin-bottom:0.4rem; }
+.card p { font-size:0.8rem; color:var(--text-faint); line-height:1.6; }
+.price-card { background:rgba(0,180,160,0.06); border:2px solid var(--teal); border-radius:12px; padding:2rem; text-align:center; }
+.price-tag { font-family:'Montserrat',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; color:var(--teal-bright); }
+.price-period { font-size:0.75rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; }
+.includes-list { list-style:none; text-align:left; margin-top:1.2rem; }
+.includes-list li { padding:0.35rem 0; font-size:0.78rem; color:var(--text-mid); border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:0.4rem; }
+.includes-list li::before { content:"\2713"; color:var(--teal-bright); font-weight:700; }
+.discount-badge { display:inline-block; background:var(--peach); color:var(--dark); font-family:'Montserrat',sans-serif; font-size:0.7rem; font-weight:800; padding:0.35rem 0.9rem; border-radius:4px; text-transform:uppercase; letter-spacing:0.06em; margin-top:1rem; }
+.faq-item { padding:0.8rem 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.faq-q { font-family:'Montserrat',sans-serif; font-size:0.75rem; font-weight:700; color:var(--peach); margin-bottom:0.3rem; }
+.faq-a { font-size:0.8rem; color:var(--text-faint); }
+.sig-line { border-bottom:1px solid rgba(255,255,255,0.25); padding-bottom:0.5rem; margin-top:2rem; min-width:220px; display:inline-block; }
+.sig-label { font-size:0.65rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.3rem; }
+.slide-counter { position:fixed; bottom:1.2rem; right:1.5rem; font-family:'Montserrat',sans-serif; font-size:0.65rem; font-weight:600; color:rgba(255,255,255,0.25); letter-spacing:0.08em; z-index:100; }
+.nav-hint { position:fixed; bottom:1.2rem; left:1.5rem; font-family:'Montserrat',sans-serif; font-size:0.55rem; color:rgba(255,255,255,0.15); letter-spacing:0.08em; z-index:100; }
+@media print {
+  .deck { overflow:visible; scroll-snap-type:none; }
+  .slide { min-height:100vh; page-break-after:always; page-break-inside:avoid; }
+  .slide-counter, .nav-hint { display:none; }
+}
+@media (max-width:768px) {
+  .slide { min-height:100vh; padding:2rem 1.2rem; }
+  .slide-img { background:#0A2A28; }
+  .slide-img img { width:100%; height:100%; object-fit:contain; }
+  .slide-html { padding:2rem 1.2rem; }
+  .inner { width:100%; }
+  .split { grid-template-columns:1fr; gap:1.2rem; }
+  .split-even { grid-template-columns:1fr; gap:1.2rem; }
+  .grid-2 { grid-template-columns:1fr; gap:0.8rem; }
+  .grid-4 { grid-template-columns:1fr 1fr; gap:0.6rem; }
+  [style*="grid-template-columns"] { grid-template-columns:1fr !important; gap:1rem !important; }
+  h2 { font-size:1.2rem; margin-bottom:0.7rem; }
+  h3 { font-size:0.85rem; }
+  .label { font-size:0.55rem; }
+  .task-num { font-size:0.5rem; padding:0.2rem 0.5rem; }
+  p { font-size:0.8rem; line-height:1.6; }
+  .quote { padding:0.5rem 0.8rem; margin-bottom:0.8rem; }
+  .quote p { font-size:0.85rem; }
+  .card { padding:0.8rem; }
+  .card h4 { font-size:0.65rem; }
+  .card p { font-size:0.7rem; line-height:1.5; }
+  .browser-frame { border-radius:6px; }
+  .browser-bar { height:22px; padding:0 8px; }
+  .browser-dot { width:6px; height:6px; }
+  .browser-frame img { max-height:250px; object-fit:cover; }
+  .price-card { padding:1.2rem; }
+  .price-tag { font-size:1.8rem; }
+  .includes-list li { font-size:0.7rem; padding:0.25rem 0; }
+  .discount-badge { font-size:0.6rem; padding:0.25rem 0.6rem; }
+  .faq-item { padding:0.5rem 0; }
+  .faq-q { font-size:0.68rem; }
+  .faq-a { font-size:0.72rem; }
+  .sig-line { min-width:120px; }
+  .scroll-arrow { display:none; }
+  .slide-counter { display:none; }
+  .nav-hint { font-size:0.5rem; }
+  .demo-link { font-size:0.65rem; }
+}
+</style>
+</head>
+<body>
+<div id="inapp-banner" style="display:none; position:fixed; top:0; left:0; right:0; z-index:9999; background:var(--teal-bright); color:var(--dark); padding:10px 16px; text-align:center; font-family:'Montserrat',sans-serif; font-size:0.7rem; font-weight:700;">
+  For the best experience, <a href="" id="inapp-link" style="color:var(--dark); text-decoration:underline;">open in Safari</a> or Chrome
+</div>
+<div class="deck" id="deck">
+
+<!-- ========== COVER ========== -->
+<section class="slide slide-html" style="background:radial-gradient(ellipse at center, #0E3D3A 0%, #0A2A28 60%, #071E1C 100%);">
+  <div class="dot-overlay"></div>
+  <div class="inner" style="text-align:center;">
+    <img src="assets/cc-wordmark.png" alt="Clinic Catalyst" style="height:40px; margin-bottom:3rem; opacity:0.9;">
+    <h2 style="font-size:clamp(2rem,4vw,3.2rem); letter-spacing:2px; margin-bottom:0.5rem;">You look after the skin<br>and the switch-off.<br><span class="teal">We handle the rest.</span></h2>
+    <p style="max-width:500px; margin:1.5rem auto 2.5rem; font-size:1rem; color:var(--text-mid);">Prepared for Serendipity Medi Spa, Canning Vale</p>
+    <p style="font-size:0.85rem; color:var(--text-faint); margin-bottom:0.3rem;">1 October 2026</p>
+    <p style="font-size:0.7rem; color:rgba(255,255,255,0.35); letter-spacing:2px; text-transform:uppercase;">By <span style="color:var(--teal-bright); font-weight:600;">Kelly Wotherspoon</span> &amp; <span style="color:var(--teal-bright); font-weight:600;">Alicia Hagen</span></p>
+  </div>
+  <div class="scroll-arrow" onclick="document.getElementById('deck').scrollBy({top:window.innerHeight,behavior:'smooth'})">
+    <span>Click to begin</span>
+    <div class="arrow">&#8595;</div>
+  </div>
+</section>
+
+<!-- ========== SOCIAL PROOF ========== -->
+<section class="slide" style="padding:0; background:#000;"><img src="assets/social-proof.png" alt="Clinics we've worked with" style="width:100%; height:100%; object-fit:contain;"></section>
+
+<!-- ========== WHAT YOU'VE BUILT ========== -->
+<section class="slide slide-html" data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <div class="split" style="grid-template-columns:1fr 2fr; gap:2.5rem;">
+      <div style="text-align:center;">
+        <p class="label label-peach">Your spa right now</p>
+        <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);">What You&rsquo;ve <span class="teal">Built Already</span></h2>
+        <div style="margin-top:1.5rem;"><div style="width:120px; height:120px; border-radius:50%; margin:0 auto 0.8rem; border:2px solid var(--teal); background:linear-gradient(135deg,#0e3d3a,#0a2a28); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-size:2.2rem; font-weight:800; color:var(--teal-bright);">S</div><p style="font-size:0.8rem; color:var(--text-faint);">Serendipity Medi Spa<br>Ranford Shopping Centre, Canning Vale</p></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">A settled, loyal team. &ldquo;We&rsquo;ve got a really good team.&rdquo; Spa therapists who are also skin therapists.</p></div>
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">A full line-up for skin - skin needling, IPL, RF, OxyGeneo, LED, Hydrabrasion and LamProbe, plus SHR hair removal.</p></div>
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">Pure Delight - a two-hour package people already buy as a gift, and gift vouchers are how many new clients find you.</p></div>
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">Memberships already launched. The foundation is there - it just needs the right structure and a proper relaunch.</p></div>
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">Spa and skin under one roof in Canning Vale, where there is not much spa competition nearby.</p></div>
+        <div class="card" style="display:flex; gap:0.8rem; align-items:flex-start; padding:1rem;"><span style="color:var(--teal-bright); font-size:1.1rem; font-weight:700; flex-shrink:0;">&#10003;</span><p style="font-size:0.82rem; color:var(--text-mid); line-height:1.5; margin:0;">A big website with a page for almost every treatment - a real head start for Google.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== GOALS ========== -->
+<section class="slide slide-html alt" data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label label-peach">Tailored for Serendipity Medi Spa</p>
+    <h2>Your Goals &amp; <span class="teal">Objectives</span></h2>
+    <div style="max-width:800px; margin-top:1rem;">
+      <div class='card' style='padding:1.1rem; margin-bottom:0.7rem;'><h4>1. Fill the Book Again</h4><p>You said it: &ldquo;If we&rsquo;re doing 14,000 weeks at half capacity, imagine if we were fully booked.&rdquo; No more sending the girls home early.</p></div>
+      <div class='card' style='padding:1.1rem; margin-bottom:0.7rem;'><h4>2. Memberships That Cover the Rent</h4><p>Relaunch memberships so members feel they are getting more, and the monthly total covers your rent of about $7,500.</p></div>
+      <div class='card' style='padding:1.1rem; margin-bottom:0.7rem;'><h4>3. Own Massage and Day Spa Search in Canning Vale</h4><p>Be the first local spa people find when they search for a massage or a pamper nearby - on Google and in the local map results.</p></div>
+      <div class='card' style='padding:1.1rem; margin-bottom:0.7rem;'><h4>4. A Christmas That Sells Itself</h4><p>Pure Delight gift vouchers front and centre, plus a runway to Black Friday for clients who have drifted away. No big ad spend needed.</p></div>
+      <div class='card' style='padding:1.1rem; margin-bottom:0rem;'><h4>5. Take Marketing Off Your Plate</h4><p>&ldquo;It&rsquo;s not our forte.&rdquo; You get a plan and a system your team can run, so marketing stops being copy and paste.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html alt" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task One</span>
+        <h2>Branding &amp; <span class="teal">Positioning</span></h2>
+        <div class="quote"><p>&ldquo;We&rsquo;re very much skin focused and we want to keep that.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Lead with the concern, not the machine - mature skin, fine lines and firmness, pigmentation, dull tired skin. Your clients search the concern.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your story first: Grace, why you bought Serendipity and what you want every client to feel. Then each team member&rsquo;s own why.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> A short video of each team member on the skin concern they love to treat, then the treatments they use for it, always with an easy way to book.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Spa and skin together is your edge - the place you come for results or to switch off. Say it everywhere.</li></ul>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/meet-the-team-real.png" alt="Your Meet the Team page as it loads today"></div><p style="font-size:0.78rem; color:var(--text-faint); margin-top:0.7rem; text-align:center;"><em>serendipitymedispa.com.au/about/meet-the-team - what a visitor sees today. This is where your team&rsquo;s stories go.</em></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html " data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task Two</span>
+        <h2>Website &amp; <span class="teal">SEO</span></h2>
+        <div class="quote"><p>&ldquo;So everyone&rsquo;s Googling Massage Spa, Canning Vale.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> We checked all 73 pages. None has a Google description, 49 have no main heading and only 1 page title mentions Canning Vale.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> 541 of 563 images have no description, and no page gives Google your business details for the map results.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your massage page has no main heading - rebuilding it as the Canning Vale massage and day spa page is the biggest search win.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your Meet the Team page is empty. Your team is your biggest point of difference.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Quick wins - titles with Canning Vale, page descriptions, one clear heading per page, business details for Google.</li></ul><a href="website-audit.html" target="_blank" class="demo-link">Read your full website audit &#8594;</a>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/website-real-screenshot.png" alt="serendipitymedispa.com.au current homepage"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html alt" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task Three</span>
+        <h2>Offer &amp; <span class="teal">Pricing Strategy</span></h2>
+        <div class="quote"><p>&ldquo;Pure Delights are really popular one.&rdquo;</p></div>
+        <p style="font-size:0.78rem; color:var(--text-mid); margin-bottom:0.7rem;">Three doors in, no need to discount your menu:</p><div style="background:rgba(0,180,160,0.06); border:1px solid rgba(0,180,160,0.25); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:0.5rem;"><p style="font-size:0.68rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem;">Door 1 - Free</p><p style="font-size:0.78rem; color:var(--text-mid); line-height:1.45; margin:0;">Skin assessment on your website and Instagram bio - a few questions, a suggested treatment, and their details captured</p></div><div style="background:rgba(0,180,160,0.06); border:1px solid rgba(0,180,160,0.25); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:0.5rem;"><p style="font-size:0.68rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem;">Door 2 - Your Bespoke Skin Consultation</p><p style="font-size:0.78rem; color:var(--text-mid); line-height:1.45; margin:0;">The consultation you already offer becomes the natural next step from the assessment</p></div><div style="background:rgba(232,168,124,0.08); border:1px solid rgba(232,168,124,0.3); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:0.5rem;"><p style="font-size:0.68rem; color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem;">Door 3 - Pure Delight</p><p style="font-size:0.78rem; color:var(--text-mid); line-height:1.45; margin:0;">Your most-loved two-hour package ($289) as the hero gift for Christmas and Mother&rsquo;s Day, with a shorter first-visit version for new clients that we price together</p></div><a href="https://clinic-catalyst-au.github.io/serendipity/assessment.html" target="_blank" class="demo-link">Try the Skin Assessment Demo &#8594;</a>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/assessment-screenshot.jpg" alt="Serendipity skin assessment demo"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html " data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task Four</span>
+        <h2>Advertising &amp; <span class="teal">Offer Strategy</span></h2>
+        <div class="quote"><p>&ldquo;Well, the thing is we&rsquo;ve, we&rsquo;ve got to start looking at Christmas soon.&rdquo;</p></div>
+        <div style="display:grid; gap:0.55rem;"><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Pure Delight</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">Two-hour massage and Deluxe Facial <span style="color:var(--teal-bright); font-weight:600;">$289</span> &middot; the Christmas gift campaign, to past voucher buyers and people like them</span></div><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Spring</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">Radiant + Refreshed <span style="color:var(--teal-bright); font-weight:600;">2 for $159</span> or <span style="color:var(--teal-bright); font-weight:600;">3 for $189</span> &middot; your live spring special</span></div><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Needling</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">Course of three, save 20% &middot; Face <span style="color:var(--teal-bright); font-weight:600;">$790</span> for fine lines and firmness</span></div><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Black Friday</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">A runway to clients who have drifted away, through the email and SMS you already have. No ad spend needed</span></div><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Members</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">Memberships from <span style="color:var(--teal-bright); font-weight:600;">$99</span> a month &middot; relaunched with tiered perks and a members-only night</span></div><div style="display:flex; align-items:baseline; gap:0.6rem;"><span style="color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72rem; min-width:95px; flex-shrink:0;">Massage</span><span style="font-size:0.78rem; color:var(--text-mid); line-height:1.4;">Canning Vale massage and day spa search on Google &middot; catching people already looking</span></div></div><p style="font-size:0.72rem; color:var(--text-faint); margin-top:0.8rem; font-style:italic;">All targeted to Canning Vale and the suburbs around Ranford.</p>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/ad-mockups-combined.png" alt="Ad mockups"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html " data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task Five</span>
+        <h2>CRM &amp; <span class="teal">Nurture Systems</span></h2>
+        <div class="quote"><p>&ldquo;Since Caroline&rsquo;s left it&rsquo;s sort of been copy and paste.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Phorest stays your booking system - we connect everything around it so nothing is typed in twice.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your lapsed clients get a warm welcome-back runway through email and SMS, timed to Christmas and Black Friday.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Every gift voucher redemption becomes a new client with a skin plan and a membership invitation.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Membership billing tidied up, so a failed payment never goes unnoticed again.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> A review request after every visit - more reviews, without anyone remembering to ask.</li></ul>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/review-sms-mockup.png" alt="Review and follow-up SMS"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html alt" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Task Six</span>
+        <h2>Speed-to-Lead &amp; <span class="teal">Last-Minute Gaps</span></h2>
+        <div class="quote"><p>&ldquo;And then they all come in last minute.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Enquiries answered straight away, including after you close at 5:30 or 7:30.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> A waitlist message goes out when a gap opens, so those last-minute bookings fill the empty hours.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your team picks up the conversation the next morning with everything already captured.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Fewer quiet afternoons, fewer girls sent home early.</li></ul>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/speed-to-lead-mockup.png" alt="After-hours enquiry reply"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html teal-bg" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num" style="border-color:var(--peach); color:var(--peach);">Bonus</span>
+        <h2>Interactive <span class="peach">Skin Assessment</span></h2>
+        <div class="quote"><p>&ldquo;Mature skin, yeah.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> A few quick questions built on your treatments - fine lines and firmness, pigmentation and sun damage, dull tired skin, redness, or just needing to switch off.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Captures their name, email and mobile, with their concern already mapped for your team.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Lives on your website, Instagram bio and Linktree.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Ends with a booking for your Bespoke Skin Consultation or a Pure Delight.</li></ul><a href="https://clinic-catalyst-au.github.io/serendipity/assessment.html" target="_blank" class="demo-link">Try the Assessment Demo &#8594;</a>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/assessment-screenshot.jpg" alt="Skin assessment"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html teal-bg" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num" style="border-color:var(--peach); color:var(--peach);">Bonus</span>
+        <h2>The Before &amp; After <span class="peach">Gallery</span></h2>
+        <div class="quote"><p>&ldquo;We&rsquo;ve actually got spa therapists that are skin therapists as well.&rdquo;</p></div>
+        <p style="font-size:0.78rem; color:var(--text-mid); margin-bottom:0.7rem;">Your own results, shown the right way:</p><div style="background:rgba(0,180,160,0.06); border:1px solid rgba(0,180,160,0.25); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:0.5rem;"><p style="font-size:0.68rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem;">Your gallery</p><p style="font-size:0.78rem; color:var(--text-mid); line-height:1.45; margin:0;">Real Serendipity clients only, grouped by concern, on your website and in an Instagram highlight</p></div><div style="background:rgba(232,168,124,0.08); border:1px solid rgba(232,168,124,0.3); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:0.5rem;"><p style="font-size:0.68rem; color:var(--peach); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem;">Always with permission</p><p style="font-size:0.78rem; color:var(--text-mid); line-height:1.45; margin:0;">Every photo shared with the client&rsquo;s written OK, with a gentle note that results vary from person to person</p></div><ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Skin, facial, spa and massage results only</li><li style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Swap any stock or manufacturer photos for your own as they come in</li></ul><a href="https://clinic-catalyst-au.github.io/serendipity/gallery.html" target="_blank" class="demo-link">See the Gallery Mockup &#8594;</a>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/gallery-screenshot.jpg" alt="Before and after gallery mockup"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TEAM ========== -->
+<section class="slide slide-html" data-editable="true">
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label">Your biggest competitive edge</p>
+    <h2>Your <span class="teal">Team</span></h2>
+    <p style="max-width:720px; margin-bottom:1.5rem;">People book people. Every team member gets their own story, the concern they love to treat, and their own way to be booked.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2rem; max-width:900px;">
+      <div class="card" style="text-align:center; padding:1.4rem;"><div style="width:120px; height:120px; border-radius:50%; margin:0 auto 0.8rem; border:2px solid var(--teal); background:linear-gradient(135deg,#0e3d3a,#0a2a28); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-size:2.2rem; font-weight:800; color:var(--teal-bright);">G</div><h4 style="color:var(--peach); font-size:0.8rem;">Grace</h4><p style="font-size:0.65rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.05em; margin-bottom:0.4rem;">OWNER</p><p style="font-size:0.75rem; color:var(--text-faint); line-height:1.5;">Your why, told your way. The heart of the Serendipity story.</p></div>
+      <div class="card" style="text-align:center; padding:1.4rem;"><div style="width:120px; height:120px; border-radius:50%; margin:0 auto 0.8rem; border:2px solid var(--teal); background:linear-gradient(135deg,#0e3d3a,#0a2a28); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-size:2.2rem; font-weight:800; color:var(--teal-bright);">L</div><h4 style="color:var(--peach); font-size:0.8rem;">Lynsey</h4><p style="font-size:0.65rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.05em; margin-bottom:0.4rem;">INSTAGRAM &amp; MEMBERSHIPS</p><p style="font-size:0.75rem; color:var(--text-faint); line-height:1.5;">Knows the memberships and packages inside out, and runs your Instagram.</p></div>
+      <div class="card" style="text-align:center; padding:1.4rem;"><div style="width:120px; height:120px; border-radius:50%; margin:0 auto 0.8rem; border:2px solid var(--teal); background:linear-gradient(135deg,#0e3d3a,#0a2a28); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-size:2.2rem; font-weight:800; color:var(--teal-bright);">M</div><h4 style="color:var(--peach); font-size:0.8rem;">Molly</h4><p style="font-size:0.65rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.05em; margin-bottom:0.4rem;">SKIN THERAPIST</p><p style="font-size:0.75rem; color:var(--text-faint); line-height:1.5;">Has a special interest in skin - the natural face of your skin content.</p></div>
+    </div>
+    <p style="font-size:0.75rem; color:var(--text-faint); margin-top:1.2rem; max-width:720px;"><em>Plus the rest of your therapists, each with their own &ldquo;what I love to treat&rdquo; video - filling your empty Meet the Team page too.</em></p>
+  </div>
+</section>
+
+<!-- ========== MEMBERSHIP RELAUNCH ========== -->
+<section class="slide slide-html alt" data-editable="true">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split">
+      <div>
+        <span class="task-num">Memberships</span>
+        <h2>A Membership That <span class="teal">Sells</span></h2>
+        <div class="quote"><p>&ldquo;Bottom line is they feel that it&rsquo;s not worth being a member.&rdquo;</p></div>
+        <ul style="list-style:none; padding:0; margin:0;"><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Right now all three tiers get the same perks, so there is no reason to step up. Tiered perks give every member a reason to move up.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Members get things the seasonal specials never give - members-only nights, priority booking, a member price on add-ons.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Seasonal promos stop undercutting members: members see every special first, at a better price.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> A relaunch runway - the team briefed and excited first, then a members-only launch, then everyone else.</li><li style="display:flex; gap:0.5rem; font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.4rem;"><span style="color:var(--teal-bright); flex-shrink:0;">&#8226;</span> Your target: enough members to cover the rent every month.</li></ul>
+        <a href="https://clinic-catalyst-au.github.io/serendipity/membership.html" target="_blank" class="demo-link">See the Membership Mockup &#8594;</a>
+      </div>
+      <div><div class="browser-frame"><div class="browser-bar"><span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span></div><img src="assets/membership-screenshot.jpg" alt="Tiered membership mockup"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== VIP NIGHTS ========== -->
+<section class="slide slide-html teal-bg" data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="inner">
+    <p class="label label-peach">Four a year, not one</p>
+    <h2>Quarterly <span class="teal">VIP Nights</span></h2>
+    <p style="max-width:720px; margin-bottom:1.5rem;">You already run a VIP night around Christmas and send it to everyone. Make it members-first and seasonal, and it becomes the reason people join and stay.</p>
+    <div class="grid-4">
+      <div class="card"><h4>Autumn</h4><p>Skin reset night - skin analysis, the season&rsquo;s treatment plan, product of the month.</p></div>
+      <div class="card"><h4>Mother&rsquo;s Day</h4><p>Pure Delight gift launch - members buy first, then everyone else.</p></div>
+      <div class="card"><h4>Spring</h4><p>Glow night with your Ultraceuticals and O Cosmedics reps and the spring special.</p></div>
+      <div class="card"><h4>Christmas</h4><p>Your existing VIP night, members first - gift vouchers, bundles and the new year&rsquo;s plan.</p></div>
+    </div>
+    <p style="font-size:0.78rem; color:var(--text-faint); margin-top:1.2rem;"><em>We give you the run-sheet for each one: invites, the night itself, and the follow-up that turns guests into bookings.</em></p>
+  </div>
+</section>
+<!-- ========== SLIDE 13: TRANSITION ========== -->
+<section class="slide slide-html teal-bg">
+  <div class="dot-overlay"></div>
+  <div class="glow glow-tl"></div>
+  <div class="glow glow-br"></div>
+  <div class="inner" style="text-align:center;">
+    <p class="label label-peach">Sound familiar?</p>
+    <h2 style="font-size:clamp(1.6rem,4vw,2.8rem); margin-bottom:1.5rem;">Stop Doing Everything <span class="peach">Yourself</span></h2>
+    <p style="max-width:650px; margin:0 auto 2rem; font-size:1rem;">Marketing. Lead follow-up. After-hours DMs. Stock. Approving social posts that go out late. You shouldn't be juggling all of this between clients.</p>
+    <h2 style="font-size:clamp(1.2rem,3vw,2rem);">That's Where <span class="teal">We Step In</span></h2>
+    <p style="max-width:600px; margin:1rem auto 0; font-size:0.85rem;">Our system uses proven methods to bring you new leads, follow them up with SMS, email and calls, take a deposit to secure their booking, and get them through the door.</p>
+    <div style="margin:2rem auto 0; display:inline-block; background:rgba(0,180,160,0.08); border:1px solid rgba(0,180,160,0.2); border-radius:8px; padding:1rem 2rem;">
+      <p style="font-size:0.7rem; color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.3rem;">A recent clinic we worked with</p>
+      <p style="font-size:1.1rem; color:var(--white); font-weight:600;">$1,002 in ad spend turned into $8,560 in results</p>
+    </div>
+  </div>
+</section>
+<!-- ========== SLIDE: HATS WE TAKE OFF YOU (moved here from top) ========== -->
+<section class="slide slide-html alt">
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <div class="split-even">
+      <div>
+        <p class="label label-peach">What we actually do</p>
+        <h2>The Hats We<br><span class="teal">Take Off You</span></h2>
+        <p style="margin-bottom:1.2rem;">So you're not in your DMs at 9pm.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> CRM - set up and configured</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Ad strategy - built and launched</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Lead capture - automated</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Nurture sequences - email & SMS</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> After hours - covered</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Newsletters - systemised</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Review requests - automated</div>
+          <div style="display:flex; gap:0.5rem; font-size:0.78rem; color:var(--text-mid);"><span style="color:var(--teal-bright); flex-shrink:0;">&#10003;</span> Google and local search - sorted</div>
+        </div>
+        <p class="mt-1" style="font-size:0.85rem; color:var(--peach-light); font-weight:600;">The only hat left is the one you actually want to wear - looking after your clients.</p>
+      </div>
+      <div>
+        <img src="assets/conference-stage.jpg" alt="Kelly and Alicia presenting" style="width:100%; border-radius:12px; object-fit:cover; object-position:center top; border:2px solid rgba(0,180,160,0.2); max-height:420px;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 14: CAMPAIGN PROCESS ========== -->
+<section class="slide slide-html alt">
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label">How it works</p>
+    <h2>Our Campaign <span class="teal">Process</span></h2>
+    <p style="max-width:700px; margin-bottom:2rem;">Client responds to your ad on Facebook or Instagram. They supply their details in exchange for your offer. From there, everything is automated.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1.2rem;">
+      <div class="card" style="text-align:center; padding:1rem;">
+        <img src="assets/campaign-ad.png" alt="Campaign" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; margin-bottom:0.8rem;">
+        <h4>Campaign</h4>
+        <p>Targeted ad with a compelling offer reaches your ideal client around Canning Vale</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1rem;">
+        <img src="assets/campaign-crm.png" alt="Into CRM" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; margin-bottom:0.8rem;">
+        <h4>Into CRM</h4>
+        <p>Lead details captured instantly - name, phone, email - entered into your system</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1rem;">
+        <img src="assets/campaign-followup.png" alt="Follow Up" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; margin-bottom:0.8rem;">
+        <h4>5-Day Follow Up</h4>
+        <p>Automated SMS, email and call sequences if they don't book immediately</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1rem;">
+        <img src="assets/campaign-booked.png" alt="Booked" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; margin-bottom:0.8rem;">
+        <h4 style="color:var(--peach);">Booked</h4>
+        <p>Deposit taken, appointment confirmed, client walks through your door</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 15: SYSTEMS INSTALLED ========== -->
+<section class="slide slide-html">
+  <div class="glow glow-br"></div>
+  <div class="inner">
+    <div class="split-even" style="margin-bottom:1.5rem;">
+      <div>
+        <p class="label">What you walk away with</p>
+        <h2>Systems <span class="teal">Installed</span></h2>
+        <p>When you're not the one juggling 7 systems that don't talk to each other, life gets easier for everyone. We install systems that just do it - no copy-paste, no manual follow-up.</p>
+      </div>
+      <div>
+        <img src="assets/systems-ecosystem.png" alt="Connected ecosystem" style="width:100%; border-radius:8px;">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/systems-leads-booked.png" alt="Leads Booked" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Leads Booked</h4><p>New enquiries captured, followed up, and booked into your Phorest calendar - without you touching your phone</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/systems-nurtured.png" alt="Clients Nurtured" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Clients Nurtured</h4><p>Your client list wakes up - newsletters, birthday offers, treatment education on autopilot</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/systems-emails.png" alt="Emails Handled" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Emails &amp; DMs Handled</h4><p>You don't need to answer the same questions all day - the system responds instantly, you focus on treating</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/systems-afterhours.png" alt="After-Hours" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>After-Hours Covered</h4><p>Enquiries handled outside clinic hours so you're not replying at 9pm - zero leads lost overnight</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SLIDE 16: YOUR PART ========== -->
+<section class="slide slide-html alt">
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label label-peach">Team effort</p>
+    <h2>Your Part in <span class="teal">the Success</span></h2>
+    <p style="max-width:700px; margin-bottom:1.5rem;">We can't control every aspect of your business. The overall success comes down to a team effort. Here's what we need from you.</p>
+    <div class="grid-2">
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/yourpart-ba.png" alt="Before & Afters" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Post Before &amp; After Images</h4><p>New clients look at your profile before they book - your own before and afters, shared with permission, do the convincing.</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/yourpart-experience.png" alt="Deliver" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Deliver the Experience</h4><p>The system gets them through the door. From there, it's your team's care and skill that turns a first visit into a lifelong client.</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/yourpart-clinic.png" alt="Clinic" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Create an Experience</h4><p>A calm, welcoming spa at Ranford is your edge - we just need to show it off online.</p></div>
+      </div>
+      <div class="card" style="padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <img src="assets/yourpart-rebook.png" alt="Rebook" style="width:120px; height:120px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+        <div><h4>Upsell &amp; Rebook</h4><p>Turn bookings into long-term clients. Ask what day works to rebook - not if they want to. That's where the real revenue lives.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== META ADS FAQ ========== -->
+<!-- ========== TWO WAYS ========== -->
+<section class="slide slide-html teal-bg">
+  <div class="dot-overlay"></div>
+  <div class="inner" style="text-align:center;">
+    <p class="label label-peach">How we work together</p>
+    <h2 style="font-size:clamp(1.6rem,4vw,2.6rem);">Two Ways to <span class="teal">Get This Done</span></h2>
+    <p style="max-width:680px; margin:0 auto 2rem;">Same result either way: your systems in, your offer built, your socials and ads working, your memberships relaunched, and your team confident running all of it.</p>
+    <div class="grid-2" style="max-width:820px; margin:0 auto; text-align:left;">
+      <div class="card" style="padding:1.5rem;"><h4>Option One</h4><h3 style="margin-top:0.3rem;">30 Days Online</h3><p>Four weeks together online. We build it with you, step by step, around your week.</p></div>
+      <div class="card" style="padding:1.5rem; border-color:var(--teal);"><h4>Option Two</h4><h3 style="margin-top:0.3rem;">3 Days In Person</h3><p>The two of us in your spa for three days, filming and editing your ads with your team, and teaching everyone to run it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html " data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="inner">
+    <div class="split-even" style="align-items:start;">
+      <div>
+        <p class="label label-peach">Option one</p>
+        <h2>30 Days <span class="teal">Online</span></h2>
+        <p style="margin-bottom:1rem;">Four weeks, online, built with you and your team.</p>
+        <div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Your systems installed and connected to Phorest<br><span style='font-size:0.68rem; color:var(--text-faint);'>Enquiry replies, follow-up, rebooking, reactivation, reviews</span></span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$4,997</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Three campaigns to new clients on Facebook and Instagram<br><span style='font-size:0.68rem; color:var(--text-faint);'>With your tracking fixed so you can see what books</span></span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$799</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Google Ads account built for Canning Vale searches</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$2,500</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Your socials revamped, with a social media strategy</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$899</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Website fixes for Google and local search<br><span style='font-size:0.68rem; color:var(--text-faint);'>From your website audit</span></span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$499</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Your front-end offer built (Pure Delight)</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Membership relaunch - tiers, positioning and launch runway</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Quarterly VIP night run-sheets</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">30 days of support after</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div>
+      </div>
+      <div class="price-card" style="margin-top:2.2rem;">
+        <p class="price-period">Total value</p>
+        <p style="font-family:'Montserrat',sans-serif; font-size:1.6rem; font-weight:800; color:var(--text-faint); text-decoration:line-through; margin:0.3rem 0 0.2rem;">$9,694+</p>
+        <p class="price-period" style="margin-top:1rem;">Your investment</p>
+        <p class="price-tag">$5,000</p>
+        <p class="price-period">one-off investment</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-html alt" data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="inner">
+    <div class="split-even" style="align-items:start;">
+      <div>
+        <p class="label label-peach">Option two</p>
+        <h2>3 Days <span class="teal">In Person</span></h2>
+        <p style="margin-bottom:1rem;">The intensive. We come to you.</p>
+        <div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Everything in option one</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">$9,694</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">The two of us in your spa for three days</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">All your ads filmed and edited in-house with your team<br><span style='font-size:0.68rem; color:var(--text-faint);'>Used across your website and socials</span></span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">Your team taught to run all of it</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div><div style="display:flex; justify-content:space-between; gap:1rem; padding:0.45rem 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-size:0.8rem; color:var(--text-mid);">30 days of support after</span><span style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--teal-bright); white-space:nowrap;">Included</span></div>
+      </div>
+      <div class="price-card" style="margin-top:2.2rem;">
+        <p class="price-period">Total value</p>
+        <p style="font-family:'Montserrat',sans-serif; font-size:1.6rem; font-weight:800; color:var(--text-faint); text-decoration:line-through; margin:0.3rem 0 0.2rem;">$9,694+</p>
+        <p class="price-period" style="margin-top:1rem;">Your investment</p>
+        <p class="price-tag">$10,000</p>
+        <p class="price-period">one-off investment</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== AFTER THE 30 DAYS ========== -->
+<section class="slide slide-html">
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label">After the 30 days</p>
+    <h2>We Don&rsquo;t <span class="teal">Disappear</span></h2>
+    <div class="grid-2" style="max-width:860px; margin-top:1.2rem;">
+      <div class="card" style="padding:1.4rem;"><h4>Review a support package</h4><p>At the end of your 30 days we look at the results together and choose the level of ongoing support that suits you.</p></div>
+      <div class="card" style="padding:1.4rem;"><h4>Or call us in when you need us</h4><p>Strategy and support whenever you need it - crafting a new offer, planning the next season, or launching something new.</p></div>
+    </div>
+    <a href="https://clinic-catalyst-au.github.io/cc-onboard/our-system.html" target="_blank" class="demo-link" style="margin-top:1.5rem;">Take the tour of the system &#8594;</a>
+  </div>
+</section>
+
+<!-- ========== WHAT WE BUILD TOGETHER ========== -->
+<section class="slide slide-html alt">
+  <div class="dot-overlay"></div>
+  <div class="glow glow-tl"></div>
+  <div class="inner">
+    <p class="label label-peach">Everything we build together</p>
+    <h2>What We <span class="teal">Build Together</span></h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2rem; margin-top:1.5rem;">
+      <div class="card" style="padding:1.2rem;"><h4>Facebook &amp; Instagram Ads</h4><p>Three campaigns to new clients around Canning Vale, with tracking fixed so you can see what books.</p></div>
+      <div class="card" style="padding:1.2rem;"><h4>Google Ads</h4><p>Catching people already searching for a massage, day spa or skin treatment nearby.</p></div>
+      <div class="card" style="padding:1.2rem;"><h4>Your Systems</h4><p>Enquiry replies, follow-up, rebooking and welcome-back campaigns, connected to Phorest.</p></div>
+      <div class="card" style="padding:1.2rem;"><h4>Memberships</h4><p>Tiered perks, members-first nights and a relaunch runway, so members stay and step up.</p></div>
+      <div class="card" style="padding:1.2rem;"><h4>Socials</h4><p>Your story, your team&rsquo;s whys, highlights and an education library that builds trust.</p></div>
+      <div class="card" style="padding:1.2rem;"><h4>Website &amp; Search</h4><p>The fixes from your audit, a skin assessment, and a massage and day spa page built to be found.</p></div>
+    </div>
+  </div>
+</section>
+<!-- ========== SLIDE 21: PROJECT ACCEPTANCE ========== -->
+<section class="slide slide-html" data-editable="true">
+  <div class="dot-overlay"></div>
+  <div class="inner">
+    <p class="label">Final step</p>
+    <h2>Project <span class="teal">Acceptance</span></h2>
+    <p style="max-width:700px;">This proposal remains confidential between Clinic Catalyst and <em>Serendipity Medi Spa</em> and must not be disclosed to any third party without written approval of Clinic Catalyst.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-top:2rem;">
+      <div class="card">
+        <h4>Agreement</h4>
+        <p>Option one (30 days online) or option two (3 days in person), as chosen together.</p>
+      </div>
+      <div class="card">
+        <h4>Payment</h4>
+        <p>Paid in full on acceptance to lock in your dates. Non-refundable once dates are locked.</p>
+      </div>
+      <div class="card">
+        <h4>Commencement</h4>
+        <p>Your start date is confirmed when payment is received.</p>
+      </div>
+    </div>
+    <div id="sig-section" style="margin-top:2rem; max-width:600px;">
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:end;">
+        <div>
+          <p class="sig-label" style="margin-bottom:0.4rem;">Sign below</p>
+          <div style="position:relative; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px; overflow:hidden;">
+            <canvas id="sig-canvas" width="400" height="140" style="width:100%; height:140px; cursor:crosshair; display:block; touch-action:none;"></canvas>
+            <button onclick="clearSig()" style="position:absolute; top:6px; right:6px; background:rgba(255,255,255,0.1); border:none; color:var(--text-faint); font-size:0.6rem; padding:3px 8px; border-radius:3px; cursor:pointer; font-family:'Montserrat',sans-serif;">Clear</button>
+          </div>
+          <input id="sig-name" type="text" placeholder="Full name" style="margin-top:0.6rem; width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:0.7rem 1rem; font-size:0.85rem; color:var(--white); font-family:'Open Sans',sans-serif; outline:none;">
+        </div>
+        <div>
+          <p class="sig-label" style="margin-bottom:0.4rem;">Date</p>
+          <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:0.8rem 1rem; font-size:0.85rem; color:var(--text-mid);" id="sig-date"></div>
+        </div>
+      </div>
+      <button id="accept-btn" onclick="acceptProposal()" style="margin-top:1.5rem; background:var(--teal-bright); color:var(--dark); border:none; padding:0.9rem 2.5rem; font-family:'Montserrat',sans-serif; font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; border-radius:6px; cursor:pointer; transition:all 0.2s;">Accept Proposal</button>
+      <div id="accept-confirm" style="display:none; margin-top:1.5rem; padding:1.2rem; background:rgba(0,212,188,0.1); border:1px solid var(--teal); border-radius:8px;">
+        <p style="color:var(--teal-bright); font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.85rem;">Proposal Accepted</p>
+        <p style="font-size:0.8rem; color:var(--text-mid); margin-top:0.3rem;">Thank you! We'll be in touch shortly to get started.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="slide-counter" id="counter">1 / --</div>
+<div class="nav-hint">Arrow keys to navigate &middot; F for fullscreen</div>
+
+<script>
+const deck = document.getElementById('deck');
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('counter');
+const total = slides.length;
+counter.textContent = '1 / ' + total;
+function updateCounter() {
+  const current = Math.round(deck.scrollTop / window.innerHeight) + 1;
+  counter.textContent = current + ' / ' + total;
+}
+deck.addEventListener('scroll', updateCounter);
+document.addEventListener('keydown', function(e) {
+  const h = window.innerHeight;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); deck.scrollBy({top:h, behavior:'smooth'}); }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); deck.scrollBy({top:-h, behavior:'smooth'}); }
+  if (e.key === 'Home') { e.preventDefault(); deck.scrollTo({top:0, behavior:'smooth'}); }
+  if (e.key === 'End') { e.preventDefault(); deck.scrollTo({top:deck.scrollHeight, behavior:'smooth'}); }
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+var ua = navigator.userAgent || '';
+if (/FBAN|FBAV|Instagram|Line|Messenger/i.test(ua)) {
+  var banner = document.getElementById('inapp-banner');
+  var link = document.getElementById('inapp-link');
+  if (banner) { banner.style.display = 'block'; }
+  if (link) { link.href = window.location.href; }
+}
+const canvas = document.getElementById('sig-canvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+let drawing = false;
+let hasSigned = false;
+if (ctx) {
+  ctx.strokeStyle = '#00D4BC';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) };
+  }
+  canvas.addEventListener('mousedown', e => { drawing = true; hasSigned = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove', e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; hasSigned = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, {passive:false});
+  canvas.addEventListener('touchend', () => drawing = false);
+}
+const dateEl = document.getElementById('sig-date');
+if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-AU', {day:'numeric', month:'long', year:'numeric'});
+function clearSig() {
+  if (ctx) { ctx.clearRect(0, 0, canvas.width, canvas.height); hasSigned = false; }
+}
+function acceptProposal() {
+  const name = document.getElementById('sig-name').value.trim();
+  if (!hasSigned) { alert('Please sign above before accepting.'); return; }
+  if (!name) { alert('Please enter your full name.'); return; }
+  document.getElementById('accept-btn').style.display = 'none';
+  document.getElementById('accept-confirm').style.display = 'block';
+}
+</script>
+</body>
+</html>
